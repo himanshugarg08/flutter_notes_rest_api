@@ -48,7 +48,7 @@ class NoteContainer extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: kDarkColor,
+                  color: Theme.of(context).colorScheme.secondary,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),

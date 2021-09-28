@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/Backend/backend_service.dart';
 import 'package:flutter_rest_api/models/note_model.dart';

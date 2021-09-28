@@ -18,18 +18,25 @@ class CustomTheme extends ChangeNotifier {
   static ThemeData get lightTheme {
     return ThemeData(
       primaryColor: primaryColor,
-      scaffoldBackgroundColor: Colors.white,
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: kDarkColor),
+      scaffoldBackgroundColor: kLightColor,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xffffa447)),
       textTheme: TextTheme(
-        headline3: GoogleFonts.raleway(
-            color: const Color(0xff2E3142), fontWeight: FontWeight.bold),
-        headline4: GoogleFonts.raleway(
-            color: const Color(0xff2E3142), fontWeight: FontWeight.bold),
-        headline6: GoogleFonts.raleway(
-            color: const Color(0xff2E3142), fontWeight: FontWeight.bold),
-        subtitle1: GoogleFonts.raleway(
-            color: const Color(0xff2E3142), fontWeight: FontWeight.bold),
+        headline1:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        headline2:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        headline3:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        headline4:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        headline5:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        headline6:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
+        subtitle1:
+            GoogleFonts.raleway(color: kDarkColor, fontWeight: FontWeight.bold),
       ),
     );
   }
@@ -37,17 +44,24 @@ class CustomTheme extends ChangeNotifier {
   static ThemeData get darkTheme {
     return ThemeData(
       primaryColor: primaryColor,
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: kLightColor),
       scaffoldBackgroundColor: const Color(0xff2E3142),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xffffa447)),
       textTheme: TextTheme(
+        headline1: GoogleFonts.raleway(
+            color: kLightColor, fontWeight: FontWeight.bold),
+        headline2: GoogleFonts.raleway(
+            color: kLightColor, fontWeight: FontWeight.bold),
         headline3: GoogleFonts.raleway(
-            color: Colors.white, fontWeight: FontWeight.bold),
+            color: kLightColor, fontWeight: FontWeight.bold),
         headline4: GoogleFonts.raleway(
-            color: Colors.white, fontWeight: FontWeight.bold),
+            color: kLightColor, fontWeight: FontWeight.bold),
+        headline5: GoogleFonts.raleway(
+            color: kLightColor, fontWeight: FontWeight.bold),
         headline6: GoogleFonts.raleway(
-            color: Colors.white, fontWeight: FontWeight.bold),
-        subtitle1: GoogleFonts.raleway(color: Colors.white),
+            color: kLightColor, fontWeight: FontWeight.bold),
+        subtitle1: GoogleFonts.raleway(color: kLightColor),
       ),
     );
   }
