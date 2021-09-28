@@ -27,3 +27,9 @@ const Map<int, String> monthsInYear = {
   11: "Nov",
   12: "Dec",
 };
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+}

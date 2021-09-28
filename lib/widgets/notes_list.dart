@@ -25,6 +25,20 @@ class _NotesListState extends State<NotesList> {
     }
   }
 
+  double getNoteContainerHeight(int length) {
+    double height = 3.0;
+    if (length < 53) {
+      height = 2.6;
+    } else if (length < 40) {
+      height = 2.2;
+    } else if (length < 27) {
+      height = 1.8;
+    } else if (length < 14) {
+      height = 1.4;
+    }
+    return height;
+  }
+
   @override
   void initState() {
     getNotesFromAPI();
@@ -42,12 +56,17 @@ class _NotesListState extends State<NotesList> {
             physics: const BouncingScrollPhysics(),
             crossAxisCount: 4,
             staggeredTileBuilder: (index) => StaggeredTile.count(
-                2,
-                noteListState[index].noteTitle.length < 40
-                    ? noteListState[index].noteTitle.length < 14
-                        ? 1.4
-                        : 1.6
-                    : 2.2),
+              2,
+              noteListState[index].noteTitle.length < 53
+                  ? (noteListState[index].noteTitle.length < 40
+                      ? (noteListState[index].noteTitle.length < 27
+                          ? (noteListState[index].noteTitle.length < 14
+                              ? 1.4
+                              : 2.0)
+                          : 2.2)
+                      : 2.4)
+                  : 3.0,
+            ),
             itemCount: noteListState.length,
             itemBuilder: (context, index) => NoteContainer(
               index: index,
