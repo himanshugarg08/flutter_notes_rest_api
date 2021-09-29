@@ -5,6 +5,7 @@ import 'package:flutter_rest_api/models/note_create_model.dart';
 import 'package:flutter_rest_api/screens/home_page.dart';
 import 'package:flutter_rest_api/widgets/custom_button.dart';
 import 'package:flutter_rest_api/widgets/input_container.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
 
 class AddNote extends StatefulWidget {
@@ -18,7 +19,7 @@ class _AddNoteState extends State<AddNote> {
   final TextEditingController _noteContent = TextEditingController();
   final TextEditingController _noteTitle = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String buttonText = "Save";
   bool isButtonActive = true;
 
@@ -62,22 +63,20 @@ class _AddNoteState extends State<AddNote> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const VerticalSpacing(of: 4),
+                  const VerticalSpacing(of: 2.5),
                   Text("Add Note",
                       style: Theme.of(context).textTheme.headline3),
-                  const VerticalSpacing(of: 8),
-                  if (isKeyBoard)
-                    Center(
-                      child: SizedBox(
-                        height: 30.h,
-                        width: 70.w,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset("assets/add_notes.png"),
-                        ),
-                      ),
+                  if (isKeyBoard) const VerticalSpacing(of: 6),
+                  const VerticalSpacing(of: 6),
+                  Center(
+                    child: SizedBox(
+                      height: !isKeyBoard ? 12.h : 20.h,
+                      width: 60.w,
+                      child: SvgPicture.asset('assets/add_notes.svg'),
                     ),
-                  const VerticalSpacing(of: 8),
+                  ),
+                  if (isKeyBoard) const VerticalSpacing(of: 6),
+                  const VerticalSpacing(of: 6),
                   InputContainer(
                       label: "Title", maxLines: 1, textController: _noteTitle),
                   const VerticalSpacing(of: 2),
