@@ -7,12 +7,14 @@ class InputContainer extends StatelessWidget {
   final String label;
   final int maxLines;
   final TextEditingController textController;
+  final bool onlyRead;
 
   const InputContainer({
     Key? key,
     required this.label,
     required this.maxLines,
     required this.textController,
+    this.onlyRead = false,
   }) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class InputContainer extends StatelessWidget {
         ),
         padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 0.6.h),
         child: TextFormField(
+          readOnly: onlyRead,
           controller: textController,
           validator: (value) {
             if (value!.trim().isEmpty) {
