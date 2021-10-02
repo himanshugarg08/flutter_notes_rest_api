@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/Backend/backend_service.dart';
-import 'package:flutter_rest_api/config/constant.dart';
-import 'package:flutter_rest_api/models/note_create_model.dart';
 import 'package:flutter_rest_api/models/note_model.dart';
 import 'package:flutter_rest_api/screens/home_page.dart';
 import 'package:flutter_rest_api/widgets/custom_button.dart';
@@ -11,6 +9,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
 
 enum NoteViewState { viewing, editing }
+
+enum DialogButtonState { doNothing, success, error }
 
 class NoteView extends StatefulWidget {
   final NoteModel note;
@@ -25,7 +25,7 @@ class _NoteViewState extends State<NoteView> {
   final TextEditingController _noteTitle = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  NoteViewState _noteViewState = NoteViewState.viewing;
+  final NoteViewState _noteViewState = NoteViewState.viewing;
 
   void initialiseFields() {
     _noteTitle.text = widget.note.noteTitle;
@@ -68,6 +68,60 @@ class _NoteViewState extends State<NoteView> {
   //     });
   //   }
   // }
+
+  Future<DialogButtonState> createDialog(BuildContext context) async {
+    DialogButtonState dialogButtonState = DialogButtonState.doNothing;
+
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            title: Text(
+              "Are you sure you want to delete this note?",
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            actions: [
+              DialogButton(
+                buttonLabel: "Cancel",
+                buttonAction: () {
+                  Navigator.of(context).pop(dialogButtonState);
+                },
+              ),
+              DialogButton(
+                buttonLabel: "Delete",
+                buttonAction: () async {
+                  final bool result =
+                      await BackendService.deleteNote(widget.note.noteID);
+                  if (result) {
+                    dialogButtonState = DialogButtonState.success;
+                  } else {
+                    dialogButtonState = DialogButtonState.error;
+                  }
+                  Navigator.of(context).pop(dialogButtonState);
+                  // if (result) {
+                  //   // Navigator.of(context)
+                  //   //     .push(MaterialPageRoute(builder: (context) {
+                  //   //   return const HomePage();
+                  //   // }));
+                  // } else {
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //       SnackBar(
+                  //           backgroundColor: Theme.of(context)
+                  //               .scaffoldBackgroundColor,
+                  //           content: Text(
+                  //             "Something Went Wrong",
+                  //             style: Theme.of(context)
+                  //                 .textTheme
+                  //                 .subtitle1,
+                  //           )));
+                  // }
+                },
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,54 +185,21 @@ class _NoteViewState extends State<NoteView> {
             invert: true,
             width: 44.w,
             buttonLabel: leftButtonText,
-            buttonAction: () {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      backgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      title: Text(
-                        "Are you sure you want to delete this note?",
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                      actions: [
-                        DialogButton(
-                          buttonLabel: "Cancel",
-                          buttonAction: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        DialogButton(
-                          buttonLabel: "Delete",
-                          buttonAction: () async {
-                            Navigator.of(context).pop();
-
-                            final bool result = await BackendService.deleteNote(
-                                widget.note.noteID);
-
-                            if (result) {
-                              // Navigator.of(context)
-                              //     .push(MaterialPageRoute(builder: (context) {
-                              //   return const HomePage();
-                              // }));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      backgroundColor: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                      content: Text(
-                                        "Something Went Wrong",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
-                                      )));
-                            }
-                          },
-                        ),
-                      ],
-                    );
-                  });
+            buttonAction: () async {
+              final result = await createDialog(context);
+              if (result == DialogButtonState.success) {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return const HomePage();
+                }));
+              } else if (result == DialogButtonState.error) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    content: Text(
+                      "Something Went Wrong",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    )));
+              } else if (result == DialogButtonState.doNothing) {}
             },
           ),
           const HorizontalSpacing(),

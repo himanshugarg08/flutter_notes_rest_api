@@ -37,8 +37,6 @@ class BackendService {
     final response = await http.delete(Uri.parse(apiURL + "/notes/" + noteID),
         headers: headers);
 
-    print(response.statusCode);
-
     if (response.statusCode == 204) {
       return true;
     }
