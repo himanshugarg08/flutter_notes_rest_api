@@ -22,6 +22,19 @@ class BackendService {
     return false;
   }
 
+  static Future<bool> getNotesByID(String noteID) async {
+    final response = await http.get(Uri.parse(apiURL + "/notes/" + noteID),
+        headers: headers);
+
+    if (response.statusCode == 200) {
+      NoteInfo.note = NoteModelExtended.fromJson(jsonDecode(response.body));
+
+      return true;
+    }
+
+    return false;
+  }
+
   static Future<bool> saveNotes(NoteCreate noteToCreate) async {
     final response = await http.post(Uri.parse(apiURL + "/notes"),
         headers: headers, body: json.encode(noteToCreate.toJson()));
