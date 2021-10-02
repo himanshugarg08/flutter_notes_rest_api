@@ -32,4 +32,17 @@ class BackendService {
 
     return false;
   }
+
+  static Future<bool> deleteNote(String noteID) async {
+    final response = await http.delete(Uri.parse(apiURL + "/notes/" + noteID),
+        headers: headers);
+
+    print(response.statusCode);
+
+    if (response.statusCode == 204) {
+      return true;
+    }
+
+    return false;
+  }
 }
