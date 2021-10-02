@@ -27,9 +27,12 @@ class _NoteViewState extends State<NoteView> {
 
   final NoteViewState _noteViewState = NoteViewState.viewing;
 
-  void initialiseFields() {
-    _noteTitle.text = widget.note.noteTitle;
-    _noteContent.text = widget.note.noteID;
+  void initialiseFields() async {
+    final result = await BackendService.getNotesByID(widget.note.noteID);
+    if (result) {
+      _noteTitle.text = NoteInfo.note.noteTitle;
+      _noteContent.text = NoteInfo.note.noteContent;
+    }
   }
 
   @override
@@ -99,23 +102,6 @@ class _NoteViewState extends State<NoteView> {
                     dialogButtonState = DialogButtonState.error;
                   }
                   Navigator.of(context).pop(dialogButtonState);
-                  // if (result) {
-                  //   // Navigator.of(context)
-                  //   //     .push(MaterialPageRoute(builder: (context) {
-                  //   //   return const HomePage();
-                  //   // }));
-                  // } else {
-                  //   ScaffoldMessenger.of(context).showSnackBar(
-                  //       SnackBar(
-                  //           backgroundColor: Theme.of(context)
-                  //               .scaffoldBackgroundColor,
-                  //           content: Text(
-                  //             "Something Went Wrong",
-                  //             style: Theme.of(context)
-                  //                 .textTheme
-                  //                 .subtitle1,
-                  //           )));
-                  // }
                 },
               ),
             ],
