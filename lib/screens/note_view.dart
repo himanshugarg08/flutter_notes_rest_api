@@ -10,7 +10,7 @@ import 'package:scalify/scalify.dart';
 
 enum NoteViewState { viewing, editing }
 
-enum DialogButtonState { doNothing, success, error }
+enum DialogButtonState { doNothing, deleteNote }
 
 class NoteView extends StatefulWidget {
   final NoteModel note;
@@ -26,6 +26,8 @@ class _NoteViewState extends State<NoteView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final NoteViewState _noteViewState = NoteViewState.viewing;
+
+  bool isLoading = false;
 
   void initialiseFields() async {
     final result = await BackendService.getNotesByID(widget.note.noteID);
@@ -76,6 +78,7 @@ class _NoteViewState extends State<NoteView> {
     DialogButtonState dialogButtonState = DialogButtonState.doNothing;
 
     return await showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -93,14 +96,8 @@ class _NoteViewState extends State<NoteView> {
               ),
               DialogButton(
                 buttonLabel: "Delete",
-                buttonAction: () async {
-                  final bool result =
-                      await BackendService.deleteNote(widget.note.noteID);
-                  if (result) {
-                    dialogButtonState = DialogButtonState.success;
-                  } else {
-                    dialogButtonState = DialogButtonState.error;
-                  }
+                buttonAction: () {
+                  dialogButtonState = DialogButtonState.deleteNote;
                   Navigator.of(context).pop(dialogButtonState);
                 },
               ),
@@ -164,45 +161,64 @@ class _NoteViewState extends State<NoteView> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomButton(
-            invert: true,
-            width: 44.w,
-            buttonLabel: leftButtonText,
-            buttonAction: () async {
-              final result = await createDialog(context);
-              if (result == DialogButtonState.success) {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return const HomePage();
-                }));
-              } else if (result == DialogButtonState.error) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    content: Text(
-                      "Something Went Wrong",
-                      style: Theme.of(context).textTheme.subtitle1,
-                    )));
-              } else if (result == DialogButtonState.doNothing) {}
-            },
-          ),
-          const HorizontalSpacing(),
-          CustomButton(
-            width: 44.w,
-            buttonLabel: rightButtonText,
-            buttonAction: () {
-              if (isButtonActive) {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                  //saveNote();
-                }
-              }
-            },
-          ),
-        ],
-      ),
+      floatingActionButton: isLoading
+          ? CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomButton(
+                  invert: true,
+                  width: 44.w,
+                  buttonLabel: leftButtonText,
+                  buttonAction: () async {
+                    final result = await createDialog(context);
+
+                    if (result == DialogButtonState.deleteNote) {
+                      setState(() {
+                        isLoading = !isLoading;
+                      });
+                      final bool result =
+                          await BackendService.deleteNote(widget.note.noteID);
+                      if (result) {
+                        setState(() {
+                          isLoading = !isLoading;
+                        });
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) {
+                          return const HomePage();
+                        }));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            content: Text(
+                              "Something Went Wrong",
+                              style: Theme.of(context).textTheme.subtitle1,
+                            )));
+                        setState(() {
+                          isLoading = !isLoading;
+                        });
+                      }
+                    } else if (result == DialogButtonState.doNothing) {}
+                  },
+                ),
+                const HorizontalSpacing(),
+                CustomButton(
+                  width: 44.w,
+                  buttonLabel: rightButtonText,
+                  buttonAction: () {
+                    if (isButtonActive) {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                        //saveNote();
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
     );
   }
 }
