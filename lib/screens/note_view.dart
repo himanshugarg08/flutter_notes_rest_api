@@ -25,15 +25,18 @@ class _NoteViewState extends State<NoteView> {
   final TextEditingController _noteTitle = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final NoteViewState _noteViewState = NoteViewState.viewing;
+  NoteViewState noteViewState = NoteViewState.viewing;
 
   bool isLoading = false;
+  bool isDataFetching = true;
 
   void initialiseFields() async {
     final result = await BackendService.getNotesByID(widget.note.noteID);
     if (result) {
       _noteTitle.text = NoteInfo.note.noteTitle;
       _noteContent.text = NoteInfo.note.noteContent;
+      isDataFetching = !isDataFetching;
+      setState(() {});
     }
   }
 
@@ -145,6 +148,7 @@ class _NoteViewState extends State<NoteView> {
             padding: EdgeInsets.symmetric(horizontal: 2.h),
             child: Form(
               key: _formKey,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -167,21 +171,34 @@ class _NoteViewState extends State<NoteView> {
                   ),
                   if (isKeyBoard) const VerticalSpacing(of: 6),
                   const VerticalSpacing(of: 6),
-                  InputContainer(
-                      onlyRead: _noteViewState == NoteViewState.viewing
-                          ? true
-                          : false,
-                      label: _noteTitle.text,
-                      maxLines: 1,
-                      textController: _noteTitle),
-                  const VerticalSpacing(of: 2),
-                  InputContainer(
-                      onlyRead: _noteViewState == NoteViewState.viewing
-                          ? true
-                          : false,
-                      label: _noteContent.text,
-                      maxLines: 4,
-                      textController: _noteContent),
+                  isDataFetching
+                      ? SizedBox(
+                          height: 20.h,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        )
+                      : Column(
+                          children: [
+                            InputContainer(
+                                onlyRead: noteViewState == NoteViewState.viewing
+                                    ? true
+                                    : false,
+                                label: "Title",
+                                maxLines: 1,
+                                textController: _noteTitle),
+                            const VerticalSpacing(of: 2),
+                            InputContainer(
+                                onlyRead: noteViewState == NoteViewState.viewing
+                                    ? true
+                                    : false,
+                                label: "Content",
+                                maxLines: 4,
+                                textController: _noteContent),
+                          ],
+                        ),
                   const VerticalSpacing(of: 10),
                 ],
               ),
@@ -194,30 +211,58 @@ class _NoteViewState extends State<NoteView> {
           ? CircularProgressIndicator(
               color: Theme.of(context).primaryColor,
             )
-          : Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomButton(
-                  invert: true,
-                  width: 44.w,
-                  buttonLabel: leftButtonText,
-                  buttonAction: onDelete,
+          : noteViewState == NoteViewState.viewing
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      invert: true,
+                      width: 44.w,
+                      buttonLabel: "Delete",
+                      buttonAction: onDelete,
+                    ),
+                    const HorizontalSpacing(),
+                    CustomButton(
+                      width: 44.w,
+                      buttonLabel: "Edit",
+                      buttonAction: () {
+                        setState(() {
+                          noteViewState = NoteViewState.editing;
+                        });
+                      },
+                    )
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      invert: true,
+                      width: 44.w,
+                      buttonLabel: "Cancel",
+                      buttonAction: () {
+                        setState(() {
+                          noteViewState = NoteViewState.viewing;
+                          _noteTitle.text = NoteInfo.note.noteTitle;
+                          _noteContent.text = NoteInfo.note.noteContent;
+                        });
+                      },
+                    ),
+                    const HorizontalSpacing(),
+                    CustomButton(
+                      width: 44.w,
+                      buttonLabel: "Save",
+                      buttonAction: () {
+                        if (isButtonActive) {
+                          if (_formKey.currentState!.validate()) {
+                            _formKey.currentState!.save();
+                            //saveNote();
+                          }
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                const HorizontalSpacing(),
-                CustomButton(
-                  width: 44.w,
-                  buttonLabel: rightButtonText,
-                  buttonAction: () {
-                    if (isButtonActive) {
-                      if (_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        //saveNote();
-                      }
-                    }
-                  },
-                ),
-              ],
-            ),
     );
   }
 }
