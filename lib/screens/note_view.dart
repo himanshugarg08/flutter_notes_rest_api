@@ -6,14 +6,13 @@ import 'package:flutter_rest_api/models/note_create_model.dart';
 import 'package:flutter_rest_api/models/note_model.dart';
 import 'package:flutter_rest_api/screens/home_page.dart';
 import 'package:flutter_rest_api/widgets/custom_button.dart';
+import 'package:flutter_rest_api/widgets/custom_dialog.dart';
 import 'package:flutter_rest_api/widgets/dialog_button.dart';
 import 'package:flutter_rest_api/widgets/input_container.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
 
 enum NoteViewState { viewing, editing }
-
-enum DialogButtonState { doNothing, deleteNote }
 
 class NoteView extends StatefulWidget {
   final NoteModel note;
@@ -49,8 +48,6 @@ class _NoteViewState extends State<NoteView> {
     super.initState();
   }
 
-  String leftButtonText = "Delete";
-  String rightButtonText = "Edit";
   bool isButtonActive = true;
   String buttonText = "Save";
 
@@ -238,36 +235,4 @@ class _NoteViewState extends State<NoteView> {
                 ),
     );
   }
-}
-
-Future<DialogButtonState> createDialog(BuildContext context) async {
-  DialogButtonState dialogButtonState = DialogButtonState.doNothing;
-
-  return await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          title: Text(
-            "Are you sure you want to delete this note?",
-            style: Theme.of(context).textTheme.subtitle1,
-          ),
-          actions: [
-            DialogButton(
-              buttonLabel: "Cancel",
-              buttonAction: () {
-                Navigator.of(context).pop(dialogButtonState);
-              },
-            ),
-            DialogButton(
-              buttonLabel: "Delete",
-              buttonAction: () {
-                dialogButtonState = DialogButtonState.deleteNote;
-                Navigator.of(context).pop(dialogButtonState);
-              },
-            ),
-          ],
-        );
-      });
 }
