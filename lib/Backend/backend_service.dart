@@ -46,6 +46,17 @@ class BackendService {
     return false;
   }
 
+  static Future<bool> editNote(String noteID, NoteCreate noteToCreate) async {
+    final response = await http.put(Uri.parse(apiURL + "/notes/" + noteID),
+        headers: headers, body: json.encode(noteToCreate.toJson()));
+
+    if (response.statusCode == 204) {
+      return true;
+    }
+
+    return false;
+  }
+
   static Future<bool> deleteNote(String noteID) async {
     final response = await http.delete(Uri.parse(apiURL + "/notes/" + noteID),
         headers: headers);

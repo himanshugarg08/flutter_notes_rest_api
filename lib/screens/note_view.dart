@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rest_api/Backend/backend_service.dart';
+import 'package:flutter_rest_api/config/constant.dart';
+import 'package:flutter_rest_api/models/note_create_model.dart';
 import 'package:flutter_rest_api/models/note_model.dart';
 import 'package:flutter_rest_api/screens/home_page.dart';
 import 'package:flutter_rest_api/widgets/custom_button.dart';
+import 'package:flutter_rest_api/widgets/dialog_button.dart';
 import 'package:flutter_rest_api/widgets/input_container.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
@@ -49,64 +52,34 @@ class _NoteViewState extends State<NoteView> {
   String leftButtonText = "Delete";
   String rightButtonText = "Edit";
   bool isButtonActive = true;
+  String buttonText = "Save";
 
-  // void saveNote() async {
-  //   setState(() {
-  //     buttonText = "Saving";
-  //     isButtonActive = false;
-  //   });
-  //   final note = NoteCreate(
-  //       noteTitle: _noteTitle.text.capitalize(),
-  //       noteContent: _noteContent.text.capitalize());
-  //   bool isNoteCreated = await BackendService.saveNotes(note);
+  void editNote() async {
+    setState(() {
+      buttonText = "Saving";
+      isButtonActive = false;
+    });
+    final note = NoteCreate(
+        noteTitle: _noteTitle.text.capitalize(),
+        noteContent: _noteContent.text.capitalize());
+    bool isNoteCreated =
+        await BackendService.editNote(NoteInfo.note.noteID, note);
 
-  //   if (isNoteCreated) {
-  //     setState(() {
-  //       buttonText = "Saved";
-  //       isButtonActive = true;
-  //     });
-  //     Navigator.pushAndRemoveUntil(context,
-  //         MaterialPageRoute(builder: (context) {
-  //       return const HomePage();
-  //     }), (route) => false);
-  //   } else {
-  //     setState(() {
-  //       buttonText = "Something Went Wrong!";
-  //       isButtonActive = true;
-  //     });
-  //   }
-  // }
-
-  Future<DialogButtonState> createDialog(BuildContext context) async {
-    DialogButtonState dialogButtonState = DialogButtonState.doNothing;
-
-    return await showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Text(
-              "Are you sure you want to delete this note?",
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            actions: [
-              DialogButton(
-                buttonLabel: "Cancel",
-                buttonAction: () {
-                  Navigator.of(context).pop(dialogButtonState);
-                },
-              ),
-              DialogButton(
-                buttonLabel: "Delete",
-                buttonAction: () {
-                  dialogButtonState = DialogButtonState.deleteNote;
-                  Navigator.of(context).pop(dialogButtonState);
-                },
-              ),
-            ],
-          );
-        });
+    if (isNoteCreated) {
+      setState(() {
+        buttonText = "Saved";
+        isButtonActive = true;
+      });
+      Navigator.pushAndRemoveUntil(context,
+          MaterialPageRoute(builder: (context) {
+        return const HomePage();
+      }), (route) => false);
+    } else {
+      setState(() {
+        buttonText = "Try Again";
+        isButtonActive = true;
+      });
+    }
   }
 
   void onDelete() async {
@@ -251,12 +224,12 @@ class _NoteViewState extends State<NoteView> {
                     const HorizontalSpacing(),
                     CustomButton(
                       width: 44.w,
-                      buttonLabel: "Save",
+                      buttonLabel: buttonText,
                       buttonAction: () {
                         if (isButtonActive) {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            //saveNote();
+                            editNote();
                           }
                         }
                       },
@@ -267,28 +240,34 @@ class _NoteViewState extends State<NoteView> {
   }
 }
 
-class DialogButton extends StatelessWidget {
-  final String buttonLabel;
-  final VoidCallback buttonAction;
+Future<DialogButtonState> createDialog(BuildContext context) async {
+  DialogButtonState dialogButtonState = DialogButtonState.doNothing;
 
-  const DialogButton({
-    Key? key,
-    required this.buttonLabel,
-    required this.buttonAction,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return TextButton(
-        style: TextButton.styleFrom(primary: Theme.of(context).primaryColor),
-        onPressed: buttonAction,
-        child: Text(
-          buttonLabel,
-          style: Theme.of(context).textTheme.subtitle1!.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-                fontSize: 14,
-              ),
-        ));
-  }
+  return await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          title: Text(
+            "Are you sure you want to delete this note?",
+            style: Theme.of(context).textTheme.subtitle1,
+          ),
+          actions: [
+            DialogButton(
+              buttonLabel: "Cancel",
+              buttonAction: () {
+                Navigator.of(context).pop(dialogButtonState);
+              },
+            ),
+            DialogButton(
+              buttonLabel: "Delete",
+              buttonAction: () {
+                dialogButtonState = DialogButtonState.deleteNote;
+                Navigator.of(context).pop(dialogButtonState);
+              },
+            ),
+          ],
+        );
+      });
 }
