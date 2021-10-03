@@ -106,6 +106,35 @@ class _NoteViewState extends State<NoteView> {
         });
   }
 
+  void onDelete() async {
+    final result = await createDialog(context);
+
+    if (result == DialogButtonState.deleteNote) {
+      setState(() {
+        isLoading = !isLoading;
+      });
+      final bool result = await BackendService.deleteNote(widget.note.noteID);
+      if (result) {
+        setState(() {
+          isLoading = !isLoading;
+        });
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return const HomePage();
+        }));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            content: Text(
+              "Something Went Wrong",
+              style: Theme.of(context).textTheme.subtitle1,
+            )));
+        setState(() {
+          isLoading = !isLoading;
+        });
+      }
+    } else if (result == DialogButtonState.doNothing) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     final isKeyBoard = MediaQuery.of(context).viewInsets.bottom == 0;
@@ -172,37 +201,7 @@ class _NoteViewState extends State<NoteView> {
                   invert: true,
                   width: 44.w,
                   buttonLabel: leftButtonText,
-                  buttonAction: () async {
-                    final result = await createDialog(context);
-
-                    if (result == DialogButtonState.deleteNote) {
-                      setState(() {
-                        isLoading = !isLoading;
-                      });
-                      final bool result =
-                          await BackendService.deleteNote(widget.note.noteID);
-                      if (result) {
-                        setState(() {
-                          isLoading = !isLoading;
-                        });
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (context) {
-                          return const HomePage();
-                        }));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            content: Text(
-                              "Something Went Wrong",
-                              style: Theme.of(context).textTheme.subtitle1,
-                            )));
-                        setState(() {
-                          isLoading = !isLoading;
-                        });
-                      }
-                    } else if (result == DialogButtonState.doNothing) {}
-                  },
+                  buttonAction: onDelete,
                 ),
                 const HorizontalSpacing(),
                 CustomButton(
