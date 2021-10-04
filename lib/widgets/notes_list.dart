@@ -3,6 +3,7 @@ import 'package:flutter_rest_api/Backend/backend_service.dart';
 import 'package:flutter_rest_api/models/note_model.dart';
 import 'package:flutter_rest_api/widgets/notes_container.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
 
 class NotesList extends StatefulWidget {
@@ -52,28 +53,47 @@ class _NotesListState extends State<NotesList> {
             child: CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
           ))
-        : StaggeredGridView.countBuilder(
-            physics: const BouncingScrollPhysics(),
-            crossAxisCount: 4,
-            staggeredTileBuilder: (index) => StaggeredTile.count(
-              2,
-              noteListState[index].noteTitle.length < 53
-                  ? (noteListState[index].noteTitle.length < 40
-                      ? (noteListState[index].noteTitle.length < 27
-                          ? (noteListState[index].noteTitle.length < 14
-                              ? 1.4
-                              : 2.0)
-                          : 2.2)
-                      : 2.4)
-                  : 3.0,
-            ),
-            itemCount: noteListState.length,
-            itemBuilder: (context, index) => NoteContainer(
-              index: index,
-              note: noteListState[index],
-            ),
-            crossAxisSpacing: 2.h,
-            mainAxisSpacing: 2.h,
-          );
+        : noteListState.isEmpty
+            ? Column(
+                children: [
+                  const VerticalSpacing(of: 20),
+                  Center(
+                    child: SizedBox(
+                        height: 22.h,
+                        child: SvgPicture.asset('assets/empty_list.svg')),
+                  ),
+                  const VerticalSpacing(of: 4),
+                  Text(
+                    "Create your first note.",
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle1!
+                        .copyWith(fontSize: 20),
+                  )
+                ],
+              )
+            : StaggeredGridView.countBuilder(
+                physics: const BouncingScrollPhysics(),
+                crossAxisCount: 4,
+                staggeredTileBuilder: (index) => StaggeredTile.count(
+                  2,
+                  noteListState[index].noteTitle.length < 53
+                      ? (noteListState[index].noteTitle.length < 40
+                          ? (noteListState[index].noteTitle.length < 27
+                              ? (noteListState[index].noteTitle.length < 14
+                                  ? 1.4
+                                  : 2.0)
+                              : 2.2)
+                          : 2.4)
+                      : 3.0,
+                ),
+                itemCount: noteListState.length,
+                itemBuilder: (context, index) => NoteContainer(
+                  index: index,
+                  note: noteListState[index],
+                ),
+                crossAxisSpacing: 2.h,
+                mainAxisSpacing: 2.h,
+              );
   }
 }
