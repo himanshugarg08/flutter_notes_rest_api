@@ -229,10 +229,26 @@ class _NoteViewState extends State<NoteView> {
                       width: 44.w,
                       buttonLabel: buttonText,
                       buttonAction: () {
+                        FocusScope.of(context).unfocus();
                         if (isButtonActive) {
                           if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
-                            editNote();
+                            if (NoteInfo.note.noteTitle == _noteTitle.text &&
+                                NoteInfo.note.noteContent ==
+                                    _noteContent.text) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      backgroundColor: Theme.of(context)
+                                          .scaffoldBackgroundColor,
+                                      content: Text(
+                                        "Please make some changes to save.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1,
+                                      )));
+                            } else {
+                              editNote();
+                            }
                           }
                         }
                       },

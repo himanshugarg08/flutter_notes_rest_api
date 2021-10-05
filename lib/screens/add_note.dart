@@ -97,6 +97,7 @@ class _AddNoteState extends State<AddNote> {
         buttonLabel: buttonText,
         buttonAction: () {
           if (isButtonActive) {
+            FocusScope.of(context).unfocus();
             if (_formKey.currentState!.validate()) {
               _formKey.currentState!.save();
               saveNote();
