@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rest_api/config/constant.dart';
 import 'package:scalify/scalify.dart';
 
 class CustomButton extends StatelessWidget {
@@ -32,9 +33,8 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(buttonLabel,
               style: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: invert
-                      ? Theme.of(context).primaryColor
-                      : Theme.of(context).colorScheme.secondary)),
+                  color:
+                      invert ? Theme.of(context).primaryColor : kLightColor)),
         ),
       ),
     );
