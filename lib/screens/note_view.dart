@@ -11,6 +11,7 @@ import 'package:flutter_rest_api/widgets/dialog_button.dart';
 import 'package:flutter_rest_api/widgets/input_container.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scalify/scalify.dart';
+import 'package:shimmer/shimmer.dart';
 
 enum NoteViewState { viewing, editing }
 
@@ -142,13 +143,11 @@ class _NoteViewState extends State<NoteView> {
                   if (isKeyBoard) const VerticalSpacing(of: 6),
                   const VerticalSpacing(of: 6),
                   isDataFetching
-                      ? SizedBox(
-                          height: 20.h,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
+                      ? Shimmer.fromColors(
+                          child: const AddNoteShimmer(),
+                          baseColor: Theme.of(context).colorScheme.surface,
+                          highlightColor:
+                              Theme.of(context).colorScheme.onSurface,
                         )
                       : Column(
                           children: [
@@ -255,6 +254,55 @@ class _NoteViewState extends State<NoteView> {
                     ),
                   ],
                 ),
+    );
+  }
+}
+
+class AddNoteShimmer extends StatelessWidget {
+  const AddNoteShimmer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Center(
+          child: Container(
+            width: 90.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 0.6.h),
+            child: TextFormField(
+              maxLines: 1,
+              readOnly: true,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ),
+        const VerticalSpacing(of: 2),
+        Center(
+          child: Container(
+            width: 90.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 2.5.w, vertical: 0.6.h),
+            child: TextFormField(
+              maxLines: 4,
+              readOnly: true,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

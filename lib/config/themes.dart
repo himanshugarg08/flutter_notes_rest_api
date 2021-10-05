@@ -19,9 +19,12 @@ class CustomTheme extends ChangeNotifier {
     return ThemeData(
       primaryColor: primaryColor,
       colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: primaryColor.withOpacity(0.2),
-          secondary: kDarkColor,
-          onPrimary: kDarkColor.withOpacity(0.4)),
+        primary: primaryColor.withOpacity(0.2),
+        secondary: kDarkColor,
+        onPrimary: kDarkColor.withOpacity(0.4),
+        surface: kDarkColor.withOpacity(0.8),
+        onSurface: kDarkColor.withOpacity(0.1),
+      ),
       scaffoldBackgroundColor: kLightColor,
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xffffa447)),
@@ -48,9 +51,12 @@ class CustomTheme extends ChangeNotifier {
     return ThemeData(
       primaryColor: primaryColor,
       colorScheme: ColorScheme.fromSwatch().copyWith(
-          secondary: kLightColor,
-          primary: kLightColor,
-          onPrimary: const Color(0xffbbc0c9)),
+        secondary: kLightColor,
+        primary: kLightColor,
+        onPrimary: const Color(0xffbbc0c9),
+        surface: kLightColor.withOpacity(0.6),
+        onSurface: kLightColor.withOpacity(1.0),
+      ),
       scaffoldBackgroundColor: const Color(0xff2E3142),
       floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xffffa447)),
