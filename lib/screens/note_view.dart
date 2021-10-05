@@ -178,8 +178,14 @@ class _NoteViewState extends State<NoteView> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: isLoading
-          ? CircularProgressIndicator(
-              color: Theme.of(context).primaryColor,
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                ),
+                const VerticalSpacing(of: 4),
+              ],
             )
           : noteViewState == NoteViewState.viewing
               ? Row(
