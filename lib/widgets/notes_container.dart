@@ -15,12 +15,17 @@ class NoteContainer extends StatelessWidget {
   final NoteModel note;
 
   String date(String dateTime) {
+    final dateTimeInIST =
+        DateTime.parse(dateTime).add(const Duration(hours: 5, minutes: 30));
+
     final date =
-        "${DateTime.parse(dateTime).day.toString()} ${monthsInYear[DateTime.parse(dateTime).month]}";
-    final hour = "${DateTime.parse(dateTime).hour}";
-    final minute = DateTime.parse(dateTime).minute < 10
-        ? "0${DateTime.parse(dateTime).minute}"
-        : "${DateTime.parse(dateTime).minute}";
+        "${dateTimeInIST.day.toString()} ${monthsInYear[dateTimeInIST.month]}";
+    final hour = dateTimeInIST.hour > 12
+        ? "${dateTimeInIST.hour % 12}"
+        : "${dateTimeInIST.hour}";
+    final minute = dateTimeInIST.minute < 10
+        ? "0${dateTimeInIST.minute}"
+        : "${dateTimeInIST.minute}";
 
     return "$date, $hour:$minute";
   }
@@ -62,7 +67,9 @@ class NoteContainer extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(2.w),
                   child: Text(
-                    date(note.createDateTime),
+                    note.latestEditDateTime == "NULL"
+                        ? date(note.createDateTime)
+                        : date(note.latestEditDateTime),
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
