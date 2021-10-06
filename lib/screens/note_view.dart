@@ -92,9 +92,10 @@ class _NoteViewState extends State<NoteView> {
         setState(() {
           isLoading = !isLoading;
         });
-        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        Navigator.pushAndRemoveUntil(context,
+            MaterialPageRoute(builder: (context) {
           return const HomePage();
-        }));
+        }), (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
