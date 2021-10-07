@@ -5,22 +5,22 @@ Note application that integrate REST API to perform CRUD operations.
 ## Screenshot
 <table>
 <tr>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/1.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/2.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/3.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/4.jpg" width=216 height=480 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/1.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/2.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/3.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/4.jpg" width=216 height=460 padding = "20"/></td>
 </tr>
 <tr>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/5.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/6.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/11.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/22.jpg" width=216 height=480 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/5.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/6.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/11.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/22.jpg" width=216 height=460 padding = "20"/></td>
 </tr>
   <tr>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/33.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/44.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/55.jpg" width=216 height=480 padding = "20"/></td>
-  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/66.jpg" width=216 height=480 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/33.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/44.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/55.jpg" width=216 height=460 padding = "20"/></td>
+  <td><img src="https://github.com/himanshugarg08/flutter_notes_rest_api/blob/main/screenshots/66.jpg" width=216 height=460 padding = "20"/></td>
 </tr>
 </table>
 
